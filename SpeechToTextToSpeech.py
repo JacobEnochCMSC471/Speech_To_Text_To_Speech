@@ -2,7 +2,6 @@ import azure.cognitiveservices.speech as speechsdk
 import winsound
 import pynput
 import time
-import os
 
 
 class STT_TTS:
