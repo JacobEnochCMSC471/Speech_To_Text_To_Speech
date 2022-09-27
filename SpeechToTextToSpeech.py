@@ -5,7 +5,7 @@ from pynput.keyboard import Key, Listener
 
 class STT_TTS:
     # ------------------------------Change API Key or Region Here------------------------------ #
-    api_key = "27c0ca7564674676945b2b26f497c457"
+    api_key = ""
     region = "eastus"  # Region in which the service was registered - can be located where the API keys are found on Azure website
     language = "en-US"  # Language that the speech recognition software will be expecting when transcribing
     # ----------------------------------------------------------------------------------------- #
@@ -20,6 +20,8 @@ class STT_TTS:
 
     # The speech synthesizer uses the Azure TTS (text-to-speech) API to convert text input into an AI-generated audio output
     speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
+
+    ssml_doc = open('voice_options.xml', 'r')
 
     # Attempts to transcribe speech into text using Azure STT API
     def speech_to_text(self):
@@ -41,12 +43,16 @@ class STT_TTS:
 
     # Uses the result from speech_to_text() in the TTS Azure API
     def text_to_speech(self, stt_result):
-        if stt_result.reason == speechsdk.ResultReason.RecognizedSpeech:  # Speech was successfully recognized
+        if stt_result == 'Error':
+            return stt_result
+
+        elif stt_result.reason == speechsdk.ResultReason.RecognizedSpeech:  # Speech was successfully recognized
             speech_synthesis_result = self.speech_synthesizer.speak_text_async(stt_result.text).get()  # Retrieve the TTS result
+            actual_text = stt_result.text
 
             if speech_synthesis_result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:  # Print transcribed speech to console
-                print("Transcribed Speech: ".format(speech_synthesis_result.text))
-                return speech_synthesis_result.text
+                print("Transcribed Speech: {}".format(actual_text))
+                return actual_text
 
             elif speech_synthesis_result.reason == speechsdk.ResultReason.Canceled:
                 cancellation_details = speech_synthesis_result.cancellation_details
@@ -58,7 +64,7 @@ class STT_TTS:
                     return "Error"
 
 
-def set_voice():
+def get_voice_options():
     print(
         'Previews of voices can be found at this website: https://azure.microsoft.com/en-us/products/cognitive-services/text-to-speech/#features')
 
@@ -106,6 +112,7 @@ def set_voice():
     # Have the user type in their voice of choice
     chosen_voice = input('\nPlease type your voice choice exactly as you see it: ')
 
+    # If the user-typed voice is not in the key list, continue looping until they enter correct value
     while chosen_voice not in key_list:
         print('Choice not found!')
         chosen_voice = input('Please type your voice choice exactly as you see it: ')
@@ -124,11 +131,18 @@ def set_voice():
 
 # Monitors keystrokes in the background - does not save anything and rewrites the file each time the function is ran
 def on_press(key):
-    file = open("temp_fix.txt", 'w')
-    key_string = str(key)
-    stripped_key_string = key_string.replace("'", "")
-    print(stripped_key_string)
-    file.write(stripped_key_string)
+    file = open("temp_fix.txt", 'w')  # Open a text file to be overwritten
+    key_string = str(key)  # Convert the recorded key to a string
+    stripped_key_string = key_string.replace("'", "")  # Strip any un-needed punctuation
+    file.write(stripped_key_string)  # Write the key to the file
+    file.close()  # Close the file
+
+    return stripped_key_string  # Return the pressed key
 
 
-set_voice()
+def main():
+    return 0
+
+
+
+
