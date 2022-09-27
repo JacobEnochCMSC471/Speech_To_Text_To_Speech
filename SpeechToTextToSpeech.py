@@ -23,8 +23,6 @@ class STT_TTS:
     # The speech synthesizer uses the Azure TTS (text-to-speech) API to convert text input into an AI-generated audio output
     speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
 
-    ssml_doc = open('voice_options.xml', 'r')
-
     # Attempts to transcribe speech into text using Azure STT API
     def speech_to_text(self):
         print("Waiting for audio input...")
