@@ -1,4 +1,4 @@
-# Speech_To_Text_To_Speech (see Development Branch for most recent additions)
+# Speech_To_Text_To_Speech
 
 A Python program that utilizes the Microsoft Azure Speech to Text and Text to Speech APIs. This was originally created to help a friend of mine who struggles with ALS. The person in question is only able to speak at a very low volume - this was designed to basically replace the voice of the user to be something louder and more understandable.
 
@@ -10,4 +10,4 @@ There are a few things that I would like to add to this project to make it more 
 Allowing the user to customize the voice that the AI speech generator uses would be a great option to have - possibly prompt the user with a simple GUI that shows them the voices available and generally what they sound like.
 Allowing the user to control various other aspects of the voice would be good, including pitch, tone, etc. Basically anything that would allow the user to show more emotion or intent would be a great addition.~~
 
-All of these have been implemented in the Development branch! 
+These features have been successfully implemented. Unit and integration testing will follow shortly. 
