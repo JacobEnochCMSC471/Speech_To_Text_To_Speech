@@ -70,7 +70,7 @@ class STT_TTS:
 
 def get_voice_options():
     print(
-        'Previews of voices can be found at this website: https://azure.microsoft.com/en-us/products/cognitive-services/text-to-speech/#features')
+        '\nPreviews of voices can be found at this website: https://azure.microsoft.com/en-us/products/cognitive-services/text-to-speech/#features\n')
 
     # Dictionary of female voices that Azure offers
     voices_female_dict = {
@@ -232,19 +232,25 @@ def main():
     print('Please enter the key you would like to use as a TTS hotkey: ')
     time.sleep(0.5)
 
-    with pynput.keyboard.Events() as hotkey_event:
-        initial_event = hotkey_event.get(10)
+    initial_event = None
 
-        if initial_event is None:
-            print("Please enter a valid key to use as a valid TTS hotkey. Program exiting...")
-            exit(0)
+    while initial_event is None:
 
-        else:
-            chosen_hotkey = parse_events(initial_event)
+        with pynput.keyboard.Events() as hotkey_event:
+            initial_event = hotkey_event.get(10)
+
+            if initial_event is None:
+                print("Input not found. Please enter a valid key to use as a valid TTS hotkey.")
+                continue
+
+            else:
+                chosen_hotkey = parse_events(initial_event)
 
     sst_tts_obj = STT_TTS()
 
     print('\nRecording of speech for TTS purposes will begin when you press the {}. This will loop until closed.\n'.format(chosen_hotkey))
+
+    time.sleep(1)
 
     # This will loop forever or until the program is stopped.
     while True:
